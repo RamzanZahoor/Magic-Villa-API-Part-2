@@ -164,6 +164,8 @@ namespace MagicVilla_Web.Services
 
         private async Task InvokeRefreshTokenEndpoint(HttpClient httpClient, string existingAccessToken, string existingRefreshToken)
         {
+
+        //1. I believe this can be written in this way. Construct APIRequest and then pass it to _apiMessageRequestBuilder.Build(apiRequest);
             HttpRequestMessage message = new();
             message.Headers.Add("Accept", "application/json");
             message.RequestUri = new Uri($"{VillaApiUrl}/api/{SD.CurrentAPIVersion}/UsersAuth/refresh");
@@ -173,7 +175,7 @@ namespace MagicVilla_Web.Services
                 AccessToken = existingAccessToken,
                 RefreshToken = existingRefreshToken
             }), Encoding.UTF8, "application/json");
-
+//2. AND THEN THIS LINE WOULD BE: var response = await httpClient.SendAsync(httpRequestMessageFactory());
             var response = await httpClient.SendAsync(message);
             var content = await response.Content.ReadAsStringAsync();
             var apiResponse = JsonConvert.DeserializeObject<APIResponse>(content);
